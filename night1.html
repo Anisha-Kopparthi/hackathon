@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {box-sizing: border-box;}
+
+.img-zoom-container {
+  position: relative;
+}
+
+.img-zoom-lens {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  /*set the size of the lens:*/
+  width: 40px;
+  height: 40px;
+}
+
+.img-zoom-result {
+  border: 1px solid #d4d4d4;
+  /*set the size of the result div:*/
+  width: 300px;
+  height: 300px;
+}
+</style>
+<script>
+function imageZoom(imgID, resultID) {
+  var img, lens, result, cx, cy;
+  img = document.getElementById(imgID);
+  result = document.getElementById(resultID);
+  /*create lens:*/
+  lens = document.createElement("DIV");
+  lens.setAttribute("class", "img-zoom-lens");
+  /*insert lens:*/
+  img.parentElement.insertBefore(lens, img);
+  /*calculate the ratio between result DIV and lens:*/
+  cx = result.offsetWidth / lens.offsetWidth;
+  cy = result.offsetHeight / lens.offsetHeight;
+  /*set background properties for the result DIV:*/
+  result.style.backgroundImage = "url('" + img.src + "')";
+  result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+  /*execute a function when someone moves the cursor over the image, or the lens:*/
+  lens.addEventListener("mousemove", moveLens);
+  img.addEventListener("mousemove", moveLens);
+  /*and also for touch screens:*/
+  lens.addEventListener("touchmove", moveLens);
+  img.addEventListener("touchmove", moveLens);
+  function moveLens(e) {
+    var pos, x, y;
+    /*prevent any other actions that may occur when moving over the image:*/
+    e.preventDefault();
+    /*get the cursor's x and y positions:*/
+    pos = getCursorPos(e);
+    /*calculate the position of the lens:*/
+    x = pos.x - (lens.offsetWidth / 2);
+    y = pos.y - (lens.offsetHeight / 2);
+    /*prevent the lens from being positioned outside the image:*/
+    if (x > img.width - lens.offsetWidth) {x = img.width - lens.offsetWidth;}
+    if (x < 0) {x = 0;}
+    if (y > img.height - lens.offsetHeight) {y = img.height - lens.offsetHeight;}
+    if (y < 0) {y = 0;}
+    /*set the position of the lens:*/
+    lens.style.left = x + "px";
+    lens.style.top = y + "px";
+    /*display what the lens "sees":*/
+    result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+  }
+  function getCursorPos(e) {
+    var a, x = 0, y = 0;
+    e = e || window.event;
+    /*get the x and y positions of the image:*/
+    a = img.getBoundingClientRect();
+    /*calculate the cursor's x and y coordinates, relative to the image:*/
+    x = e.pageX - a.left;
+    y = e.pageY - a.top;
+    /*consider any page scrolling:*/
+    x = x - window.pageXOffset;
+    y = y - window.pageYOffset;
+    return {x : x, y : y};
+  }
+}
+</script>
+</head>
+<body>
+<center>
+<h2 style="text-align:center">FEMER</h2>
+
+<div class="img-zoom-container">
+ <table class="table table-borderless">
+    <tbody>
+      <tr>
+  <th><img id="myimage" src="https://i.pinimg.com/originals/c2/fd/14/c2fd1407d4c9c67c4245c6e5fe8963d8.jpg" width="300" height="300"></th>
+  <td><div id="myresult" class="img-zoom-result" ></div></td>
+  </tr>
+<tr><p><th>PRODUCT DETAILS</th><br>
+<th>
+Pink and grey printed pajama set<br></p></th></tr>
+
+<tr><p><th><h3>Material & Care</th><br>
+<th>
+
+Main/Lining: 100% Polyester
+Machine wash</p></th></tr>
+   <tr>
+   <th><h2>Size</h2></th>
+   <td><h4><input type="radio" name="size">S</input>
+           <input type="radio" name="size">M</input>
+           <input type="radio" name="size">L</input>
+           <input type="radio" name="size">XL</input>
+           <input type="radio" name="size">XXL</input><br></h4></td>
+   </tr>
+   <tr>
+   <th><h3>--------------------DISCOUNT-----------------------</h2><td><h2 style="color:tomato";>-----------------------------------------------60% OFF---------------------------------------------------------------------------------------------</h2></td></th>
+   <tr>
+   <th><h2>price</h2></th>
+   <td><del>₹1699</del><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;₹999</b></td
+   </tr>
+   
+    <form action="/action_page.php">
+    <tr>
+  <th><label for="quantity"><h2>Quantity</h2></label></th>
+  <td><input type="number" id="quantity" name="quantity" min="0" max="100" step="1" value="10"></td>
+
+</form>
+</tr>
+</tbody><br>
+
+<table>
+<tr>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+
+</tr>
+<tr>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+
+</tr>
+<tr>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+
+</tr>
+<tr>
+
+<th ><input type="button"  value="BUY NOW" onclick="#"/></th>
+</tr>
+</table>
+</div>
+ 
+
+
+
+
+<script>
+// Initiate zoom effect:
+
+ imageZoom("myimage", "myresult");
+</script>
+</center>
+</body>
+</html>
